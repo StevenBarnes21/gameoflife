@@ -13,9 +13,9 @@ h1 {
 }
 canvas {
   border: 1px solid #000;
-  width: 50%;
-  height: 50%;
-  background: #00A;
+  width: 40%;
+  height: 40%;
+  /* background: #00A; */
 }
 
 input[type="button"]{

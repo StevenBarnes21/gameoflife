@@ -2,8 +2,8 @@
 let grid1, grid2;
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
-canvas.width = 400;
-canvas.height = 400;
+canvas.width = 300;
+canvas.height = 300;
 // change this to 80 for an error with a cool effect
 const SQUARES = 50;  
 const TIMER = 200;
@@ -12,7 +12,7 @@ let coloredSquares = false;
 
 window.onload = () => {
   document.getElementById('reset').addEventListener('click', start);
-    start();
+  start();
   document.getElementById('color').addEventListener('click', (e) => {
     coloredSquares = e.target.checked;
   })
@@ -76,6 +76,7 @@ function update(arr1, arr2) {
   copyArray(arr1, arr2);
 }
 
+// Used to copy nested array
 function copyArray(arr1, arr2) {
   for(let i = 0; i < arr1.length; i++) {
     for(let j = 0; j < arr1[0].length; j++) {
@@ -117,8 +118,8 @@ function checkNeighbours(arr, currentRow = 0, currentCol = 0) {
 
   // count neighbours
   let neighbours = up + down + left + right +
-      diagUpLeft + diagUpRight + 
-      diagDownLeft + diagDownRight ;
+                   diagUpLeft + diagUpRight + 
+                   diagDownLeft + diagDownRight ;
     // Any live cell with fewer than two live neighbours dies, as if by underpopulation.
     if(state == 1 && neighbours < 2) return 0;
   
@@ -129,7 +130,7 @@ function checkNeighbours(arr, currentRow = 0, currentCol = 0) {
     if(state == 1 && neighbours > 3) return 0;
   
 // /    Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-    if(state == 0 & neighbours ==3) return 1;
+    if(state == 0 & neighbours == 3) return 1;
 }
 
 function setup() {
@@ -143,6 +144,7 @@ function run() {
   drawGrid();
 }
 
+let newColor = getNextColor();
 function drawGrid() {
   const size = canvas.width / SQUARES;
   
@@ -152,11 +154,12 @@ function drawGrid() {
   
       if(grid1[i][j] == 1) {
         if(coloredSquares){
-           ctx.fillStyle = getRandomColor();
+           // Uses a closure to produce the next hsl color
+           ctx.fillStyle = newColor();
         } else {
            ctx.fillStyle = '#000';
         }
-       
+        
       } else {
         ctx.fillStyle = '#FFF';
       }
@@ -173,3 +176,14 @@ function getRandomColor() {
   return '#' + red + green + blue;
 }
 
+function getNextColor() {
+
+  let h = 0;
+
+  let nextColor = () => {
+    h++;
+    return `hsl(${h}, 100%, 50%)`;
+  }
+
+  return nextColor;
+}
